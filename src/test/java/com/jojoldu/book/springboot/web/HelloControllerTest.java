@@ -8,8 +8,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 /*
@@ -46,6 +47,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     mvc.perform의 결과를 검증한다.
     응답 본문의 내용을 검증한다.
     Controller에서 "hello"를 리턴하기 때문에 이값이 맞는지 검증한다.
+
+    param
+        API테스트할 때 사용될 요청 파라미터를 설정한다.
+        단 값은 String만 허용
+        그래서 숫자/날짜등의 데이터를 등록할경우에는 문자열로 변경
+    jsonPath
+        JSON 응답값을 필드별로 검증할 수 있는 메소드
+        $를 기준으로 필드명을 명시
+        여기서는 name과 amount이니 $.name, $.amount로 검증
  */
 
 @RunWith(SpringRunner.class)
@@ -62,6 +72,25 @@ public class HelloControllerTest {
         mvc.perform(get("/hello"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(hello));
+    }
+
+    /*
+        실제 URL테스트 값
+        http://localhost:8080/hello/dto?name=hello&amount=1000
+
+        실제 JSON 결과값
+        {"name":"hello","amount":1000}
+     */
+    @Test
+    public void HelloDto가_리턴된다() throws Exception{
+        String name = "hello";
+        int amount = 1000;
+
+        mvc.perform(
+                    get("/hello/dto").param("name",name).param("amount",String.valueOf(amount)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.name", is(name)))
+                    .andExpect(jsonPath("$.amount", is(amount)));
     }
 
 }
