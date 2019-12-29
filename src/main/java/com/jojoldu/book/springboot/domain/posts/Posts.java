@@ -64,6 +64,11 @@ public class Posts {
         this.author = author;
     }
 
-
-
+    /*
+        책에서는 나와있지 않아서 다운받은 소스에서 보고 추가함
+     */
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
