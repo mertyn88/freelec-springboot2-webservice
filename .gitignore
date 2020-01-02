@@ -2,3 +2,6 @@
 
 .gradle
 .idea
+
+# 구글연동에 관련된 파일은 git에 연동되는것을 방지해야한다.
+application-oauth.properties
