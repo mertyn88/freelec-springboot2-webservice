@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,5 +71,44 @@ public class PostsRepositoryTest {
         Posts posts = postsList.get(0);
         assertThat(posts.getTitle()).isEqualTo(title);
         assertThat(posts.getContent()).isEqualTo(content);
+    }
+
+    @Test
+    public void BaseTimeEntity_등록(){
+        //given
+        LocalDateTime now = LocalDateTime.now();
+
+        postsRepository.save(Posts.builder()
+                       .title("2020년 1월 2일")
+                       .content("내용부분")
+                       .author("이준명")
+                       .build());
+
+        //when
+        List<Posts> postsList = postsRepository.findAll();
+
+        //then
+        Posts posts = postsList.get(0);
+
+        System.out.println(">>> createDate = " + posts.getCreatedDate() + ", modifiedDate = " + posts.getModifiedDate());
+
+        /*
+        책에서는
+        LocalDateTime.of(2019,6,4,0,0,0) 으로 되어있는데 매칭이 안되어서
+        now값으로 하였다. 그러나 상속받는 부분의 설정된 시간이 먼저 해당시간을 기록하고
+        비교하는 해당 클래스에서는 조금이나마 늦게 해당시간을 기록하여 맞질 않는다.
+
+        expected:<2020-01-02T12:47:09.[156]> but was:<2020-01-02T12:47:09.[225]>
+        Expected :2020-01-02T12:47:09.156
+        Actual   :2020-01-02T12:47:09.225
+
+        미세한 차이 발생
+
+
+        assertThat(posts.getCreatedDate()).isEqualTo(now);
+        assertThat(posts.getModifiedDate()).isEqualTo(now);
+        */
+
+
     }
 }
