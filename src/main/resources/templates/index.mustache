@@ -1,11 +1,40 @@
+
+<!--
+    \{\{#userName\}\}
+        머스테치는 다른 언어와 같은 if문을 제공하지 않는다.
+        true/false 여부만 판단
+        머스테치에서는 항상 최종값을 넘겨줘야한다. ( 처리를 아마 java단에서 하고 결과만 return이란 이야기인듯하다)
+
+     a href=/logout
+        스크링 시큐리티에서 기본적으로 제공하는 로그아웃 url이다.
+        개발자가 별도로 url에 해당하는 컨트롤러를 만들 필요가 없다.
+        SecurityConfig 클래스에서 URL을 변경할 수 있지만 기본 URL을 사용해도 충분
+
+     \{\{^userName\}\}
+        머스테치에서 해당 값이 존재하지 않는 경우에는 ^사용 ( null이거나 empty일경우인가..?)_
+        여기서는 userName의 값이 없다면 로그인 버튼을 노출
+
+     a href=/oauth2/authorization/google
+        스크링 시큐리티에서 기본적으로 제공하는 로그인 url이다.
+        로그아웃 URL과 마찬가지로 개발자가 별도의 컨트롤러를 생성할 필요가 없다.
+-->
 {{>layout/header}}  <!-- 현재 머스테치 파일을 기준으로 다른파일을 가져온다 ( = import) -->
         <h1>머스타치 3번째 시간</h1>
         <div class="col-md-12">
+            <!-- 로그인 기능 영역 -->
             <div class="row">
                 <div class="col-md-6">
                     <a href="/posts/save" role="button" class="btn btn-primary">글등록</a>
+                    <!-- userName Loop -->
+                    {{#userName}}
+                        Logged in as : <span id="user">{{username}}</span><a href="/logout" class="btn btn-info active" role="button">Logout</a>
+                    {{/userName}}
+                    {{^userName}}
+                        <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                    {{/userName}}
                 </div>
             </div>
+
         <!-- 목록 출력 영역 -->
         <br>
         <table class="table table-horizontal table-bordered">
