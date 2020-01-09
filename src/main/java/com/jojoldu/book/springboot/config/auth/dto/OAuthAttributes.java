@@ -41,9 +41,29 @@ public class OAuthAttributes {
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes ){
         System.out.println("3번째 수행 클래스 : 2번수행클래스의 로그인정보를 entity클래스에 적재하기 위한 클래스");
-        return ofGoogle(userNameAttributeName, attributes);
+
+        if(registrationId.equals("naver")){
+            //Naver
+            return ofNaver("id", attributes);
+        }else{
+            //Google
+            return ofGoogle(userNameAttributeName, attributes);
+        }
     }
 
+    //Naver 관련 Builder
+    private  static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes){
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        return OAuthAttributes.builder()
+                .name((String) response.get("name"))
+                .email((String) response.get("email"))
+                .picture((String) response.get("profile_image")) //책에서는 값을 profileImage로 가져오는데 실제 맵을 열어보면 profile_image로 되어있다.
+                .attributes(response)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    //Google 관련 Builder
     private  static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes){
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
