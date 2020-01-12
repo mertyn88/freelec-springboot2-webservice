@@ -54,6 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         System.out.println("1번째 수행 클래스 : 스프링부트가 기동될때 이미 수행된다.");
 
+        /**
+         * 로그인 disable 처리
+         */
         http.csrf().disable().headers().frameOptions().disable()
                 .and().authorizeRequests()
                       .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()

@@ -79,7 +79,9 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .role(Role.GUEST)
+                //.role(Role.GUEST)
+                //GUEST로 하면 일일이 DB 업데이트 해줘야함 ROLE을 GUEST->USER
+                .role(Role.USER)
                 .build();
     }
 }
